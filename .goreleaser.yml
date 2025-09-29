@@ -36,9 +36,6 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
 
 release:
-  github:
-    owner: rohit746
-    name: tscgit
   draft: false
   prerelease: auto
   name_template: "Release {{ .Tag }}"
@@ -72,29 +69,3 @@ changelog:
       - '^ci:'
       - Merge pull request
       - Merge branch
-
-brews:
-  - name: tscgit
-    repository:
-      owner: rohit746
-      name: homebrew-tap
-    folder: Formula
-    homepage: https://github.com/rohit746/tscgit
-    description: "Interactive command-line Git coach for students"
-    license: MIT
-    test: |
-      system "#{bin}/tscgit", "help"
-
-nfpms:
-  - id: tscgit
-    package_name: tscgit
-    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
-    homepage: https://github.com/rohit746/tscgit
-    description: Interactive command-line Git coach for students
-    maintainer: Rohit <rohit746@example.com>
-    license: MIT
-    vendor: tscgit
-    formats:
-      - deb
-      - rpm
-    bindir: /usr/bin
