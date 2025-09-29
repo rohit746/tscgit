@@ -251,14 +251,14 @@ func init() {
 		Description: "Confirm commit C: add classics.csv exists on add_classics.",
 		Steps: []Step{
 			{
-				Command:        "git --no-pager log -n 5",
+				Command:        "git --no-pager log -n 1 --pretty=%s",
 				ExpectExitCode: 0,
 				ExpectStdout:   []string{"C: add classics.csv"},
 			},
 			{
 				Command:        "git branch",
 				ExpectExitCode: 0,
-				ExpectStdout:   []string{"C:"},
+				ExpectStdout:   []string{"* add_classics"},
 			},
 		},
 	})

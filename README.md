@@ -57,7 +57,7 @@ Each run script executes one or more commands (via PowerShell on Windows or sh o
 | `7` | Create titles.md             | Verifies the `B:` commit and `titles.md` contents. |
 | `8` | Switch default branch        | Checks global default branch and locals are `main`. |
 | `9` | Create add_classics branch   | Confirms branch creation and checkout. |
-| `10`| Commit classics.csv          | Looks for the `C:` commit while on `add_classics`. |
+| `10`| Commit classics.csv          | Confirms the latest commit is `C: add classics.csv` while you're still on `add_classics`. |
 | `11a`| Prepare merge history       | Inspects the pre-merge graph for commits `A:` through `D:`. |
 | `11b`| Merge add_classics          | Confirms merge commit `E:` with multiple parents. |
 
