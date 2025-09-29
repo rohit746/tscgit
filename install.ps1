@@ -70,7 +70,11 @@ try {
     if ($userPath -notlike "*$installDir*") {
         Write-Host "Adding $installDir to PATH..." -ForegroundColor Yellow
         [Environment]::SetEnvironmentVariable("PATH", "$userPath;$installDir", "User")
-        Write-Host "✓ Added to PATH (restart your terminal to use 'tscgit' directly)" -ForegroundColor Green
+        Write-Host "✓ Added to PATH" -ForegroundColor Green
+    Write-Host "  To use 'tscgit' directly, either:" -ForegroundColor Yellow
+    Write-Host "  1. Restart your terminal/PowerShell, OR" -ForegroundColor Cyan
+    Write-Host "  2. Run this command to refresh PATH:" -ForegroundColor Cyan
+    Write-Host "     `$env:PATH = [Environment]::GetEnvironmentVariable('PATH', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User')" -ForegroundColor White
     }
     
     # Test installation

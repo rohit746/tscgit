@@ -10,12 +10,12 @@
 
 **Windows (PowerShell)**:
 ```powershell
-iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/main/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/refs/heads/master/install.ps1 | iex
 ```
 
 **Linux/macOS**:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/refs/heads/master/install.sh | sh
 ```
 
 ### 📦 Other Installation Methods

@@ -54,8 +54,8 @@ release:
     ```
     
     **Quick install scripts:**
-    - Windows (PowerShell): `iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/main/install.ps1 | iex`
-    - Linux/macOS: `curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/main/install.sh | sh`
+    - Windows (PowerShell): `iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/refs/heads/master/install.ps1 | iex`
+    - Linux/macOS: `curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/refs/heads/master/install.sh | sh`
 
 checksum:
   name_template: 'checksums.txt'
