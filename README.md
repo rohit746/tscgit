@@ -2,44 +2,122 @@
 
 `tscgit` is an interactive command-line coach for practicing Git workflows. It ships with ready-to-use lessons and a Bubble Tea-powered verification UI that guides students through checks in style.
 
-## Installation
+## Quick Start
 
+**Students: Choose your installation method**
+
+### 🚀 One-Line Install (Recommended)
+
+**Windows (PowerShell)**:
 ```powershell
-# From the repository root
-go install ./cmd/tscgit
+iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/main/install.ps1 | iex
 ```
 
-This installs the `tscgit` binary into your Go bin directory (for Windows PowerShell users, typically `%USERPROFILE%\go\bin`). Make sure that directory is on your `PATH`.
+**Linux/macOS**:
+```bash
+curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/main/install.sh | sh
+```
 
-## Usage
+### 📦 Other Installation Methods
 
-List available lessons:
+**Go Users**:
+```bash
+go install github.com/rohit746/tscgit/cmd/tscgit@latest
+```
 
-```powershell
+**Download Pre-built Binaries**:
+1. Visit the [releases page](https://github.com/rohit746/tscgit/releases)
+2. Download the appropriate file for your system:
+   - Windows: `tscgit_*_windows_amd64.zip`
+   - macOS: `tscgit_*_darwin_amd64.tar.gz` (Intel) or `tscgit_*_darwin_arm64.tar.gz` (Apple Silicon)
+   - Linux: `tscgit_*_linux_amd64.tar.gz`
+3. Extract and place the binary in your `PATH`
+
+**Package Managers**:
+```bash
+# Homebrew (macOS/Linux)
+brew install rohit746/tap/tscgit
+
+# APT (Ubuntu/Debian) - coming soon
+# sudo apt install tscgit
+
+# RPM (CentOS/RHEL/Fedora) - coming soon
+# sudo dnf install tscgit
+```
+
+### ✅ Verify Installation
+
+```bash
+tscgit version
 tscgit lessons
 ```
 
-Verify your progress against a lesson:
+## System Requirements
 
-```powershell
+- **Operating System**: Windows 10+, macOS 10.15+, or Linux (any modern distribution)
+- **Architecture**: x86_64 (amd64) or ARM64
+- **Dependencies**: None (statically compiled binary)
+- **Git**: Required for lessons (install from [git-scm.com](https://git-scm.com))
+
+## 🎓 Getting Started
+
+After installation, start your Git learning journey:
+
+### 1. See What's Available
+```bash
+tscgit lessons
+```
+
+### 2. Try Your First Lesson
+```bash
+# Start with environment setup
+tscgit run 0
+
+# Or jump into Git basics
 tscgit verify init-basics
 ```
 
-Use `-path` to point at a different repository:
+### 3. Practice in Your Own Repository
+```bash
+# Create a practice repository
+mkdir git-practice && cd git-practice
+git init
 
-```powershell
-tscgit verify -path C:\path\to\practice-repo init-basics
+# Run verification lessons
+tscgit verify init-basics
 ```
 
-The verifier launches a terminal UI that streams each check with spinners, colorful feedback, and a summary once complete. Exit with `q` or `Ctrl+C` at any time.
+## Usage
 
-Run scripted environment checks (the "Git Started" track):
-
-```powershell
-tscgit run 0
+**List available lessons**:
+```bash
+tscgit lessons
 ```
 
-Each run script executes one or more commands (via PowerShell on Windows or sh on Unix) and validates exit codes and stdout to mimic an instructor walking through setup tasks.
+**Verify your Git skills** (interactive UI with real-time checks):
+```bash
+tscgit verify init-basics
+tscgit verify -path /path/to/repo lesson-name
+```
+
+**Run guided practice scripts** (step-by-step command validation):
+```bash
+tscgit run 0    # Test your setup
+tscgit run 1    # Install Git  
+tscgit run 2    # Configure Git identity
+```
+
+**Check version**:
+```bash
+tscgit version
+```
+
+### 🎮 Interactive Features
+
+- **Real-time verification**: See your progress as you work
+- **Colorful feedback**: Clear visual indicators for success/failure  
+- **Keyboard shortcuts**: Press `q` or `Ctrl+C` to exit anytime
+- **Cross-platform**: Works on Windows PowerShell, macOS Terminal, and Linux shells
 
 ### Git Started run scripts
 
@@ -122,13 +200,91 @@ runlesson.Register(&runlesson.Script{
 
 Commands are executed inside the user's shell (PowerShell on Windows, `sh` elsewhere). The runner enforces exit codes (set `ExpectExitCode` to `-1` to skip) and validates that every string listed in `ExpectStdout` is present in command output.
 
-## Development
+## 🛠 Development
 
-Format and test everything with:
+### Prerequisites
+- Go 1.25+
+- Git
 
-```powershell
-gofmt -w .
-go test ./...
+### Building from Source
+```bash
+# Clone the repository
+git clone https://github.com/rohit746/tscgit.git
+cd tscgit
+
+# Build and install
+go install ./cmd/tscgit
+
+# Or build for development
+go build -o bin/tscgit ./cmd/tscgit
 ```
 
-The project targets Go 1.25+.
+### Testing
+```bash
+# Format code
+gofmt -w .
+
+# Run tests
+go test ./...
+
+# Test cross-compilation
+GOOS=windows GOARCH=amd64 go build ./cmd/tscgit
+GOOS=darwin GOARCH=arm64 go build ./cmd/tscgit
+GOOS=linux GOARCH=amd64 go build ./cmd/tscgit
+```
+
+### Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Add your lessons or improvements
+4. Test thoroughly
+5. Submit a pull request
+
+See the [architecture documentation](.github/copilot-instructions.md) for details on adding new lessons and scripts.
+
+## 📚 For Educators
+
+`tscgit` is designed to help educators teach Git effectively:
+
+- **Standardized lessons**: Consistent learning experience across all students
+- **Automated verification**: No manual grading of Git exercises  
+- **Progressive difficulty**: Lessons build upon each other
+- **Cross-platform**: Works in any environment your students use
+- **Extensible**: Easy to add custom lessons for your curriculum
+
+### Classroom Setup
+```bash
+# Students can install in seconds
+curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/main/install.sh | sh
+
+# Or provide direct download links from releases page
+# https://github.com/rohit746/tscgit/releases
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Whether you're:
+- **Students**: Report bugs, suggest improvements
+- **Educators**: Add lessons for your curriculum  
+- **Developers**: Improve the codebase
+
+See our [contribution guidelines](CONTRIBUTING.md) and [architecture docs](.github/copilot-instructions.md).
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## 🙏 Acknowledgments
+
+Built with:
+- [Bubble Tea](https://github.com/charmbracelet/bubbletea) - Terminal UI framework
+- [Lip Gloss](https://github.com/charmbracelet/lipgloss) - Style definitions  
+- [Bubbles](https://github.com/charmbracelet/bubbles) - Common UI components
+
+---
+
+**Happy Git learning! 🎉**
+
+If you find `tscgit` helpful, please ⭐ star the repository and share it with other Git learners!
+
+````

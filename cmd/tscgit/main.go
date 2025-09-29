@@ -17,6 +17,13 @@ import (
 	verifyui "github.com/rohit746/tscgit/internal/ui/verify"
 )
 
+// Version information set at build time via ldflags
+var (
+	Version = "dev"
+	Commit  = "none"
+	Date    = "unknown"
+)
+
 func main() {
 	os.Exit(run(os.Args[1:]))
 }
@@ -30,6 +37,9 @@ func run(args []string) int {
 	switch args[0] {
 	case "help", "--help", "-h":
 		printUsage()
+		return 0
+	case "version", "--version", "-v":
+		printVersion()
 		return 0
 	case "lessons", "list":
 		printLessons()
@@ -121,11 +131,18 @@ Usage:
   tscgit lessons             List available lessons
   tscgit verify <lesson-id>  Verify lesson progress in the current repo
   tscgit run <script-id>     Run terminal practice scripts
+  tscgit version             Show version information
 
 Flags:
   tscgit verify [-path DIR] <lesson-id>
 
 `)
+}
+
+func printVersion() {
+	fmt.Fprintf(os.Stdout, "tscgit version %s\n", Version)
+	fmt.Fprintf(os.Stdout, "commit: %s\n", Commit)
+	fmt.Fprintf(os.Stdout, "built: %s\n", Date)
 }
 
 func printLessons() {

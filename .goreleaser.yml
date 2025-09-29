@@ -1,0 +1,100 @@
+# GoReleaser configuration for tscgit
+version: 2
+
+project_name: tscgit
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - id: tscgit
+    main: ./cmd/tscgit
+    binary: tscgit
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X main.Version={{.Version}}
+      - -X main.Commit={{.Commit}}
+      - -X main.Date={{.Date}}
+
+archives:
+  - id: tscgit
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+release:
+  github:
+    owner: rohit746
+    name: tscgit
+  draft: false
+  prerelease: auto
+  name_template: "Release {{ .Tag }}"
+  header: |
+    ## tscgit {{ .Tag }}
+    
+    Interactive Git coach for students.
+    
+    ### Installation
+    
+    Download the appropriate binary for your system below, or use one of these methods:
+    
+    **Go users:**
+    ```bash
+    go install github.com/rohit746/tscgit/cmd/tscgit@{{ .Tag }}
+    ```
+    
+    **Quick install scripts:**
+    - Windows (PowerShell): `iwr -useb https://raw.githubusercontent.com/rohit746/tscgit/main/install.ps1 | iex`
+    - Linux/macOS: `curl -fsSL https://raw.githubusercontent.com/rohit746/tscgit/main/install.sh | sh`
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - Merge pull request
+      - Merge branch
+
+brews:
+  - name: tscgit
+    repository:
+      owner: rohit746
+      name: homebrew-tap
+    folder: Formula
+    homepage: https://github.com/rohit746/tscgit
+    description: "Interactive command-line Git coach for students"
+    license: MIT
+    test: |
+      system "#{bin}/tscgit", "help"
+
+nfpms:
+  - id: tscgit
+    package_name: tscgit
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://github.com/rohit746/tscgit
+    description: Interactive command-line Git coach for students
+    maintainer: Rohit <rohit746@example.com>
+    license: MIT
+    vendor: tscgit
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
