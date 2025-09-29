@@ -105,6 +105,44 @@ try {
     & $TscgitBin verify init-basics
     & $TscgitBin verify branch-basics
 
+    $commitD = (git log --grep '^D: update contents.md' --format=%H -n 1).Trim()
+    if ([string]::IsNullOrWhiteSpace($commitD)) {
+        throw "Could not locate commit hash for D: update contents.md"
+    }
+    git switch -c update_dune $commitD | Out-Null
+    & $TscgitBin run 12a
+
+    if (-not (Test-Path 'quotes')) {
+        New-Item -ItemType Directory -Path 'quotes' | Out-Null
+    }
+    '- "The spice must flow."' | Set-Content -LiteralPath 'quotes/dune.md'
+    git add quotes/dune.md
+    git commit -m 'H: add spice quote' | Out-Null
+
+    '- "Fear is the mind-killer."' | Add-Content -LiteralPath 'quotes/dune.md'
+    git add quotes/dune.md
+    git commit -m 'I: add fear quote' | Out-Null
+
+    git rebase main | Out-Null
+    & $TscgitBin run 12b
+
+    '# Titles' | Set-Content -LiteralPath 'titles.md'
+    '- This list was overwritten by accident.' | Add-Content -LiteralPath 'titles.md'
+    git add titles.md
+    git commit -m 'J: add overwritten titles' | Out-Null
+    & $TscgitBin run 13a
+
+    $commitI = (git log --grep '^I: add fear quote' --format=%H -n 1).Trim()
+    if ([string]::IsNullOrWhiteSpace($commitI)) {
+        throw "Could not locate commit hash for I: add fear quote"
+    }
+    git reset --soft $commitI | Out-Null
+    & $TscgitBin run 13b
+
+    git status | Out-Null
+    git reset --hard $commitI | Out-Null
+    & $TscgitBin run 13c
+
     Write-Host "`nAll lessons and verifications completed successfully." -ForegroundColor Green
 }
 finally {

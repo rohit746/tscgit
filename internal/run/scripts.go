@@ -288,4 +288,152 @@ func init() {
 			},
 		},
 	})
+
+	Register(&Script{
+		ID:          "12a",
+		Title:       "Branch off D",
+		Description: "Create update_dune from the D commit to prepare for a rebase.",
+		Steps: []Step{
+			{
+				Command:        "git branch --show-current",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"update_dune"},
+			},
+			{
+				Command:        "git --no-pager log -n 1 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"D: update contents.md"},
+			},
+		},
+	})
+
+	Register(&Script{
+		ID:          "12b",
+		Title:       "Rebase update_dune",
+		Description: "Add dune quotes and rebase the branch on top of main for a linear history.",
+		Steps: []Step{
+			{
+				Command:        "git branch --show-current",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"update_dune"},
+			},
+			{
+				Command:        "git --no-pager log -n 1 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: "},
+			},
+			{
+				Command:        "git --no-pager log -n 2 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: ", "H: "},
+			},
+			{
+				Command:        "git rev-list --count update_dune..main",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"0"},
+			},
+			{
+				Command:        "git rev-list --count main..update_dune",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"2"},
+			},
+			{
+				Command:        "git --no-pager log --oneline -n 8",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: ", "H: ", "E: ", "D: ", "C: ", "B: ", "A: "},
+			},
+		},
+	})
+
+	Register(&Script{
+		ID:          "13a",
+		Title:       "Overwrite titles.md",
+		Description: "Simulate an accidental overwrite on update_dune and capture the new commit.",
+		Steps: []Step{
+			{
+				Command:        "git branch --show-current",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"update_dune"},
+			},
+			{
+				Command:        "git --no-pager log -n 1 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"J: add overwritten titles"},
+			},
+			{
+				Command:        "git --no-pager log -n 3 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"J: add overwritten titles", "I: add fear quote", "H: add spice quote"},
+			},
+			{
+				Command:        "cat titles.md",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"# Titles", "overwritten"},
+			},
+		},
+	})
+
+	Register(&Script{
+		ID:          "13b",
+		Title:       "Soft reset to I",
+		Description: "Undo the accidental commit while keeping the overwritten titles staged.",
+		Steps: []Step{
+			{
+				Command:        "git branch --show-current",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"update_dune"},
+			},
+			{
+				Command:        "git --no-pager log -n 1 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: add fear quote"},
+			},
+			{
+				Command:        "git --no-pager log -n 3 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: add fear quote", "H: add spice quote", "E: merge add_classics"},
+			},
+			{
+				Command:        "git status --short",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"M  titles.md"},
+			},
+			{
+				Command:        "git diff --cached titles.md",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"This list was overwritten by accident."},
+			},
+		},
+	})
+
+	Register(&Script{
+		ID:          "13c",
+		Title:       "Hard reset titles.md",
+		Description: "Drop the accidental change by hard resetting the branch back to commit I.",
+		Steps: []Step{
+			{
+				Command:        "git branch --show-current",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"update_dune"},
+			},
+			{
+				Command:        "git --no-pager log -n 1 --pretty=%s",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"I: add fear quote"},
+			},
+			{
+				Command:        "git diff --cached --quiet",
+				ExpectExitCode: 0,
+			},
+			{
+				Command:        "git diff --quiet",
+				ExpectExitCode: 0,
+			},
+			{
+				Command:        "cat titles.md",
+				ExpectExitCode: 0,
+				ExpectStdout:   []string{"# Titles"},
+			},
+		},
+	})
 }

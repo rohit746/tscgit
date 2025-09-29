@@ -60,6 +60,11 @@ Each run script executes one or more commands (via PowerShell on Windows or sh o
 | `10`| Commit classics.csv          | Confirms the latest commit is `C: add classics.csv` while you're still on `add_classics`. |
 | `11a`| Prepare merge history       | Inspects the pre-merge graph for commits `A:` through `D:`. |
 | `11b`| Merge add_classics          | Confirms merge commit `E:` with multiple parents. |
+| `12a`| Branch off D                | Ensures `update_dune` exists and points to commit `D: update contents.md`. |
+| `12b`| Rebase update_dune          | Checks that commits `H:` and `I:` were added and the branch rebased onto `main`. |
+| `13a`| Overwrite titles.md         | Simulates an accidental overwrite on `update_dune` and confirms commit `J:`. |
+| `13b`| Soft reset to I              | Ensures the accidental commit is removed while keeping `titles.md` staged. |
+| `13c`| Hard reset titles.md         | Teaches using a hard reset to drop the staged overwrite and restore the file. |
 
 ## Adding new verification lessons
 

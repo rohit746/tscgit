@@ -89,4 +89,40 @@ git commit -m "[branch] add lesson notes"
 "${TSGIT_BIN}" verify init-basics
 "${TSGIT_BIN}" verify branch-basics
 
+D_COMMIT="$(git log --format=%H --grep '^D: update contents\.md' -n 1)"
+git switch -c update_dune "${D_COMMIT}"
+"${TSGIT_BIN}" run 12a
+
+mkdir -p quotes
+cat <<'EOF' >quotes/dune.md
+- "The spice must flow."
+EOF
+git add quotes/dune.md
+git commit -m "H: add spice quote"
+
+cat <<'EOF' >>quotes/dune.md
+- "Fear is the mind-killer."
+EOF
+git add quotes/dune.md
+git commit -m "I: add fear quote"
+
+git rebase main
+"${TSGIT_BIN}" run 12b
+
+cat <<'EOF' >titles.md
+# Titles
+- This list was overwritten by accident.
+EOF
+git add titles.md
+git commit -m "J: add overwritten titles"
+"${TSGIT_BIN}" run 13a
+
+I_COMMIT="$(git log --format=%H --grep '^I: add fear quote' -n 1)"
+git reset --soft "${I_COMMIT}"
+"${TSGIT_BIN}" run 13b
+
+git status >/dev/null
+git reset --hard "${I_COMMIT}"
+"${TSGIT_BIN}" run 13c
+
 echo "\nAll lessons and verifications completed successfully."
